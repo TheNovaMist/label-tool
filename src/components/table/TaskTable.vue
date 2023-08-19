@@ -1,5 +1,7 @@
 <template>
   <div class="max-w-md m-6">
+    <Pagination />
+
     <el-table :data="tableData" stripe style="width: 100%">
       <el-table-column prop="title" label="标题" />
       <el-table-column prop="scale" label="景别" />
@@ -10,27 +12,33 @@
   </div>
 </template>
 <script setup>
-const tableData = [
-  {
-    title: 'test1',
-    scale: '',
-    angle: '',
-    movement: '',
-    description: ''
-  },
-  {
-    title: 'test2',
-    scale: '',
-    angle: '',
-    movement: '',
-    description: ''
-  },
-  {
-    title: 'test3',
-    scale: '',
-    angle: '',
-    movement: '',
-    description: ''
-  }
-]
+// const tableData = [
+//   {
+//     title: 'test1',
+//     scale: '',
+//     angle: '',
+//     movement: '',
+//     description: ''
+//   },
+//   {
+//     title: 'test2',
+//     scale: '',
+//     angle: '',
+//     movement: '',
+//     description: ''
+//   },
+//   {
+//     title: 'test3',
+//     scale: '',
+//     angle: '',
+//     movement: '',
+//     description: ''
+//   }
+// ]
+
+import { computed } from 'vue'
+import { useDataStore } from '../../stores/data'
+import Pagination from './Pagination.vue'
+const store = useDataStore()
+const tableData = computed(() => store.getTableData)
 </script>
