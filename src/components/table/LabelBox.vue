@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 
 const tableData = [
   {
@@ -26,7 +27,8 @@ const tableData = [
 ]
 
 // const isVideoType = ref(true)
-const isVideoType = ref(false)
+// const isVideoType = ref(false)
+const isVideoType = computed(() => parseInt(routeId.value) % 2 === 0)
 const formData = ref(tableData[0])
 
 // 选项类别
@@ -59,6 +61,28 @@ const radioList = computed(() => {
 
   return []
 })
+
+// 路由切换
+const route = useRoute()
+const router = useRouter()
+const routeId = computed(() => route.params.id)
+
+function moveBack() {
+  router.push({
+    name: 'media',
+    params: {
+      id: parseInt(routeId.value) - 1
+    }
+  })
+}
+function moveForward() {
+  router.push({
+    name: 'media',
+    params: {
+      id: parseInt(routeId.value) + 1
+    }
+  })
+}
 </script>
 <template>
   <div class="m-6">
@@ -93,6 +117,15 @@ const radioList = computed(() => {
         <el-input v-model="formData.description" placeholder="输入主体内容的描述" />
       </el-form-item>
     </el-form>
+    <div class="flex justify-center">
+      <el-button @click="moveBack">
+        <el-icon><ArrowLeftBold /></el-icon>
+      </el-button>
+      <el-button @click="moveForward">
+        <el-icon><ArrowRightBold /></el-icon>
+      </el-button>
+      <el-button type="primary">提交</el-button>
+    </div>
   </div>
 </template>
 <style scoped>

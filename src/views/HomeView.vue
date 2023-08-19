@@ -7,7 +7,9 @@ import TaskTable from '../components/table/TaskTable.vue'
   <main>
     <div class="flex">
       <TaskTable />
-      <LabelBox />
+      <RouterView>
+        <LabelBox />
+      </RouterView>
     </div>
   </main>
 </template>
