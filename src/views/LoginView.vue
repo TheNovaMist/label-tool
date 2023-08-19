@@ -1,6 +1,13 @@
 <template>
-  <LoginForm />
+  <LoginForm @login-event="handleLoginEvent" />
 </template>
 <script setup>
+import { useRouter } from 'vue-router'
 import LoginForm from '../components/login/LoginForm.vue'
+
+const router = useRouter()
+// login event
+function handleLoginEvent() {
+  router.push('/home')
+}
 </script>

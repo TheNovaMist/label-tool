@@ -109,6 +109,7 @@
         <button
           type="submit"
           class="inline-block rounded-lg bg-blue-500 px-5 py-3 text-sm font-medium text-white"
+          @click.prevent="emits('login-event')"
         >
           Sign in
         </button>
@@ -122,4 +123,6 @@ import { ref } from 'vue'
 const showPassword = ref(false)
 
 const togglePasswordVisibility = () => (showPassword.value = !showPassword.value)
+
+const emits = defineEmits(['login-event'])
 </script>
