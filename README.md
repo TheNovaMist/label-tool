@@ -49,3 +49,5 @@ Pinia 在 Composition API 格式中使用到了 `ref()` / `computed()`，导出�
 `computed()` 可以使用另一个 `computed()` 响应式变量，并且保持响应性。
 
 使用 `?.` [可选链运算符（?.） - JavaScript | MDN](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/Optional_chaining) 避免组件访问对象属性时产生 undefined 报错。
+
+关于资源路径中 `@` 符号的转义，如果一个 `<img>` 元素使用静态的 `src` 属性中包含 `@` 会自动解释为项目的根目录。但是如果 `src` 属性使用了一个 **响应式变量** ，`@` 会被解释成当前组件文件的路径导致错误。
