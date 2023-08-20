@@ -10,9 +10,15 @@ import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
+import { useDataStore } from '@/stores/data'
+
 const app = createApp(App)
 
 app.use(createPinia())
+// 初始化数据库连接
+const store = useDataStore()
+store.openDatabase()
+
 app.use(router)
 
 app.use(ElementPlus)

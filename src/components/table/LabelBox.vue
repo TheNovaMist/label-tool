@@ -86,8 +86,6 @@ const store = useDataStore()
 const mediaInfo = ref([])
 
 onMounted(async () => {
-  console.log('🚀 ~ file: LabelBox.vue:91 ~ onMounted ~ openDatabase:')
-  await store.openDatabase()
   mediaInfo.value = await store.getMediaInfo(routeId.value)
   console.log('🚀 ~ file: LabelBox.vue:92 ~ onMounted ~ mediaInfo:', mediaInfo)
 })
