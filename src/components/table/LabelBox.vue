@@ -1,33 +1,7 @@
 <script setup>
-import { ref, computed, onMounted, watch, reactive } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useDataStore } from '@/stores/data'
-
-const tableData = [
-  {
-    title: 'test1',
-    scale: '',
-    angle: '',
-    movement: '',
-    description: ''
-  },
-  {
-    title: 'test2',
-    scale: '',
-    angle: '',
-    movement: '',
-    description: ''
-  },
-  {
-    title: 'test3',
-    scale: '',
-    angle: '',
-    movement: '',
-    description: ''
-  }
-]
-
-const formData = ref(tableData[0])
 
 // 选项类别
 var radioListData = [
@@ -82,12 +56,29 @@ function moveForward() {
   })
 }
 
+// 本地数据
+var formData = ref({
+  scale: null,
+  angle: null,
+  movement: null,
+  description: null
+})
+
+// 提交数据
+async function submit() {
+  console.log('submit form data: ', formData.value)
+  const res = await store.updateMediaAnnotation(formData.value)
+  console.log('🚀 ~ file: LabelBox.vue:71 ~ submit ~ res:', res)
+  await store.fetchTableData()
+}
+
 const store = useDataStore()
 const mediaInfo = ref([])
 
 onMounted(async () => {
   mediaInfo.value = await store.getMediaInfo(routeId.value)
   console.log('🚀 ~ file: LabelBox.vue:92 ~ onMounted ~ mediaInfo:', mediaInfo)
+  formData.value = await store.getMediaAnnotation(routeId.value)
 })
 
 watch(routeId, async (id, prevId) => {
@@ -96,14 +87,14 @@ watch(routeId, async (id, prevId) => {
     const videoPlayer = document.querySelector('video')
     videoPlayer.load()
   }
-
+  formData.value = await store.getMediaAnnotation(id)
   mediaInfo.value = await store.getMediaInfo(id)
 })
 
 const url = computed(() =>
   mediaInfo.value.length !== 0
     ? 'http://localhost:5173' + mediaInfo.value[0].url.replace('@', '/src')
-    : 'ss'
+    : 'not found'
 )
 
 /**
@@ -115,6 +106,9 @@ const isVideoType = computed(() => url.value.endsWith('.mp4'))
   <div class="m-6">
     {{ mediaInfo }}
     {{ url }}
+
+    <br />
+    {{ formData }}
     <div class="media-box">
       <img :src="url" v-if="!isVideoType" />
       <video ref="videoPlayer" v-else controls>
@@ -153,7 +147,7 @@ const isVideoType = computed(() => url.value.endsWith('.mp4'))
       <el-button @click="moveForward">
         <el-icon><ArrowRightBold /></el-icon>
       </el-button>
-      <el-button type="primary">提交</el-button>
+      <el-button type="primary" @click="submit">提交</el-button>
     </div>
   </div>
 </template>

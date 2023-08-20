@@ -12,33 +12,13 @@
   </div>
 </template>
 <script setup>
-// const tableData = [
-//   {
-//     title: 'test1',
-//     scale: '',
-//     angle: '',
-//     movement: '',
-//     description: ''
-//   },
-//   {
-//     title: 'test2',
-//     scale: '',
-//     angle: '',
-//     movement: '',
-//     description: ''
-//   },
-//   {
-//     title: 'test3',
-//     scale: '',
-//     angle: '',
-//     movement: '',
-//     description: ''
-//   }
-// ]
-
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useDataStore } from '../../stores/data'
 import Pagination from './Pagination.vue'
 const store = useDataStore()
-const tableData = computed(() => store.getTableData)
+const tableData = computed(() => store.data)
+
+onMounted(() => {
+  store.fetchTableData()
+})
 </script>

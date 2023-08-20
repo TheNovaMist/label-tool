@@ -8,7 +8,7 @@
       background
       :layout="layout"
       :total="store.total"
-      @current-change="store.getTableData"
+      @current-change="store.fetchTableData"
     />
   </div>
 </template>
