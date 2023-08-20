@@ -8,6 +8,6 @@ import LoginForm from '../components/login/LoginForm.vue'
 const router = useRouter()
 // login event
 function handleLoginEvent() {
-  router.push('/home')
+  router.push('/home/m/1')
 }
 </script>
