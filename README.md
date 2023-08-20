@@ -51,3 +51,77 @@ Pinia 在 Composition API 格式中使用到了 `ref()` / `computed()`，导出�
 使用 `?.` [可选链运算符（?.） - JavaScript | MDN](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/Optional_chaining) 避免组件访问对象属性时产生 undefined 报错。
 
 关于资源路径中 `@` 符号的转义，如果一个 `<img>` 元素使用静态的 `src` 属性中包含 `@` 会自动解释为项目的根目录。但是如果 `src` 属性使用了一个 **响应式变量** ，`@` 会被解释成当前组件文件的路径导致错误。
+
+## TODO
+
+- 表单数据持久化
+- 读取本地目录并插入待标注的媒体信息
+- 动态的标注选项
+
+## 数据库语句
+
+```sqlite
+CREATE TABLE IF NOT EXISTS media_info (
+    id INTEGER PRIMARY KEY,
+    title TEXT NOT NULL,
+    url TEXT NOT NULL
+);
+```
+
+```sqlite
+INSERT INTO media_info (id, title, url) VALUES 
+    (1, 'Example Title 1', '@/assets/file1.jpg'),
+    (2, 'Example Title 2', '@/assets/file2.jpg'),
+    (3, 'Example Title 3', '@/assets/file3.jpg'),
+    (4, 'Example Title 4', '@/assets/file4.jpg'),
+    (5, 'Example Title 5', '@/assets/file5.png'),
+    (6, 'Example Title 6', '@/assets/file6.mp4'),
+    (7, 'Example Title 7', '@/assets/file7.mp4');
+```
+
+```sqlite
+SELECT * FROM media_info LIMIT 5 OFFSET 0;
+```
+
+```sqlite
+CREATE TABLE IF NOT EXISTS media_annotation (
+    id INTEGER PRIMARY KEY,
+    scale TEXT,
+    angle TEXT,
+    movement TEXT,
+    description TEXT
+);
+
+INSERT INTO media_annotation (id) VALUES 
+    (1),
+    (2),
+    (3),
+    (4),
+    (5),
+    (6),
+    (7);
+    
+SELECT * FROM media_annotation;
+```
+
+```sqlite
+INSERT INTO media_annotation (id, scale, angle, movement, description) VALUES (1, NULL, NULL, NULL, NULL);
+
+UPDATE media_annotation SET scale = '特写', angle = NULL, movement = NULL, description = NULL WHERE id = 1;
+```
+
+**连表查询**
+
+```sqlite
+SELECT *
+FROM media_info info
+JOIN media_annotation anno ON info.id = anno.id;
+```
+
+**统计总数**
+
+```sqlite
+SELECT COUNT(*)
+FROM media_info info
+JOIN media_annotation anno ON info.id = anno.id;
+```
