@@ -1,0 +1,14 @@
+CREATE TABLE IF NOT EXISTS media_info (
+    id INTEGER PRIMARY KEY,
+    title TEXT NOT NULL,
+    url TEXT NOT NULL
+);
+
+INSERT INTO media_info (id, title, url) VALUES 
+    (1, 'Example Title 1', '@/assets/file1.jpg'),
+    (2, 'Example Title 2', '@/assets/file2.jpg'),
+    (3, 'Example Title 3', '@/assets/file3.jpg'),
+    (4, 'Example Title 4', '@/assets/file4.jpg'),
+    (5, 'Example Title 5', '@/assets/file5.png'),
+    (6, 'Example Title 6', '@/assets/file6.mp4'),
+    (7, 'Example Title 7', '@/assets/file7.mp4');

@@ -15,8 +15,8 @@
 
 <script setup>
 import { useDataStore } from '@/stores/data'
-const store = useDataStore()
 
+const store = useDataStore()
 const layout = 'total, sizes, prev,pager,next'
 const sizes = [10, 15, 20]
 </script>

@@ -1,6 +1,7 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, watch, reactive } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useDataStore } from '@/stores/data'
 
 const tableData = [
   {
@@ -26,9 +27,6 @@ const tableData = [
   }
 ]
 
-// const isVideoType = ref(true)
-// const isVideoType = ref(false)
-const isVideoType = computed(() => parseInt(routeId.value) % 2 === 0)
 const formData = ref(tableData[0])
 
 // 选项类别
@@ -71,7 +69,7 @@ function moveBack() {
   router.push({
     name: 'media',
     params: {
-      id: parseInt(routeId.value) - 1
+      id: Math.max(parseInt(routeId.value) - 1, 1)
     }
   })
 }
@@ -79,17 +77,50 @@ function moveForward() {
   router.push({
     name: 'media',
     params: {
-      id: parseInt(routeId.value) + 1
+      id: Math.min(parseInt(routeId.value) + 1, 7)
     }
   })
 }
+
+const store = useDataStore()
+const mediaInfo = ref([])
+
+onMounted(async () => {
+  console.log('🚀 ~ file: LabelBox.vue:91 ~ onMounted ~ openDatabase:')
+  await store.openDatabase()
+  mediaInfo.value = await store.getMediaInfo(routeId.value)
+  console.log('🚀 ~ file: LabelBox.vue:92 ~ onMounted ~ mediaInfo:', mediaInfo)
+})
+
+watch(routeId, async (id, prevId) => {
+  console.log('routeId change from {} to {}', prevId, id)
+  if (isVideoType.value) {
+    const videoPlayer = document.querySelector('video')
+    videoPlayer.load()
+  }
+
+  mediaInfo.value = await store.getMediaInfo(id)
+})
+
+const url = computed(() =>
+  mediaInfo.value.length !== 0
+    ? 'http://localhost:5173' + mediaInfo.value[0].url.replace('@', '/src')
+    : 'ss'
+)
+
+/**
+ * 判断文件类型
+ */
+const isVideoType = computed(() => url.value.endsWith('.mp4'))
 </script>
 <template>
   <div class="m-6">
+    {{ mediaInfo }}
+    {{ url }}
     <div class="media-box">
-      <img src="@/assets/img.jpg" v-if="!isVideoType" />
-      <video v-else controls>
-        <source src="@/assets/video.mp4" type="video/mp4" />
+      <img :src="url" v-if="!isVideoType" />
+      <video ref="videoPlayer" v-else controls>
+        <source :src="url" type="video/mp4" />
       </video>
     </div>
     <!-- 切换测试 -->
